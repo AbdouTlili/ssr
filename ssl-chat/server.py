@@ -43,12 +43,11 @@ def client_thread(conn,addr):
 
             else : 
                 #FIXME when the message has no content 
-                exit()
                 remove(conn)
 
         except : 
             print("error occured")
-            continue 
+            
 
 
 def send(message,connection): 
@@ -76,7 +75,7 @@ while True :
 
     #TODO the connection log is printed to the server's terminal 
     connection_log_msg = '<'+'log'+'>'+' user :'+str(addr)+' just connected'
-    print('\n'+connection_log_msg)
+    print(connection_log_msg)
 
     #creating a thread for every user 
     start_new_thread(client_thread,(conn,addr))
