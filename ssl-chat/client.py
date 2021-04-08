@@ -15,6 +15,11 @@ Port = int(sys.argv[2])
 
 #bind the sever to the given ip and port 
 server.connect((IP_addr,Port))
+
+
+## TODO  call handshake function 
+# sharedkey =  handshake(server) 
+
 while True: 
   
     # maintains a list of possible input streams 
@@ -29,15 +34,20 @@ while True:
     below.If the user wants to send a message, the else 
     condition will evaluate as true"""
     read_sockets,write_socket, error_socket = select.select(sockets_list,[],[]) 
+
   
     for socks in read_sockets: 
         if socks == server: 
             message = socks.recv(4096) 
+            ## decrypt and verify signature  
+            ## using sharedkey variable 
             message = message.decode()
             print(message) 
             sys.stdout.flush() 
         else: 
             message = sys.stdin.readline() 
+            ## encrypt and sign 
+            ## using sharedkey variable 
             message_as_byte = message.encode()
             server.send(message_as_byte) 
             print("<You>"+message) 
