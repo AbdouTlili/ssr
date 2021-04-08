@@ -24,27 +24,30 @@ list_of_clients = []
 def client_thread(conn,addr):
     
     # hello message to the client with conn object 
-
     conn.send(b"successfuly connected to ssl-chat server !!")
-
     while True : 
         try:
+            
             message = conn.recv(4096)
-
+            
+            print(message.decode())
+            print('***')
             if message : 
 
                 #NOTE i dont know yet if the log here will be needed later on
-                message_ = '<'+addr[0]+'>'+message
+                message_ = '<'+addr[0]+'>'+message.decode()
                 # print the logs in the servers terminal 
                 print(message_)
                 
-                send(message_, conn)
+                send(message_.encode(), conn)
 
             else : 
                 #FIXME when the message has no content 
+                exit()
                 remove(conn)
 
         except : 
+            print("error occured")
             continue 
 
 
@@ -52,11 +55,9 @@ def send(message,connection):
     for client in list_of_clients:
         if client != connection :
             try:
-                client.send(b'message')
-
+                client.send(message)
             except :
                 client.close()
-
                 remove(client)
 
 def remove(connection):

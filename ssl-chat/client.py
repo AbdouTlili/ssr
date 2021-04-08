@@ -15,29 +15,33 @@ Port = int(sys.argv[2])
 
 #bind the sever to the given ip and port 
 server.connect((IP_addr,Port))
-
-while True:
-    sockets_list = [sys.stdin,server]
-
-    #no timeout in select to block untill a change is made in the lists
-
-    r_socket, wr_socket, err_socket = select.select(sockets_list,[],[])
-
-    for scks in r_socket:
-        if scks == server : 
-            # this means that the chat server is sending to us (the client)
-            message = scks.recv(4096)
-            message_ = '<'+'received'+'>'+str(message)
-            #TODO maybe more sofisticated log message  ?? 
-            print(message_)
-
+while True: 
+  
+    # maintains a list of possible input streams 
+    sockets_list = [sys.stdin, server] 
+  
+    """ There are two possible input situations. Either the 
+    user wants to give manual input to send to other people, 
+    or the server is sending a message to be printed on the 
+    screen. Select returns from sockets_list, the stream that 
+    is reader for input. So for example, if the server wants 
+    to send a message, then the if condition will hold true 
+    below.If the user wants to send a message, the else 
+    condition will evaluate as true"""
+    read_sockets,write_socket, error_socket = select.select(sockets_list,[],[]) 
+  
+    for socks in read_sockets: 
+        if socks == server: 
+            message = socks.recv(4096) 
+            message = message.decode()
+            sys.stdout.write(message) 
+            sys.stdout.flush() 
         else: 
-            #in this case the read op is from the terminal 
-            # we read from it and send to the server 
-            message = sys.stdin.readline()
-            server.send(b'message')
-            print('<you>'+message)
-            sys.stdout.flush()
-
-server.close()
-
+            message = sys.stdin.readline() 
+            message_as_byte = message.encode()
+            #message = bytes(message)
+            server.send(message_as_byte) 
+            sys.stdout.write("<You>") 
+            sys.stdout.write(message) 
+            sys.stdout.flush() 
+server.close() 
