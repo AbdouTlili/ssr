@@ -34,14 +34,12 @@ while True:
         if socks == server: 
             message = socks.recv(4096) 
             message = message.decode()
-            sys.stdout.write(message) 
+            print(message) 
             sys.stdout.flush() 
         else: 
             message = sys.stdin.readline() 
             message_as_byte = message.encode()
-            #message = bytes(message)
             server.send(message_as_byte) 
-            sys.stdout.write("<You>") 
-            sys.stdout.write(message) 
+            print("<You>"+message) 
             sys.stdout.flush() 
 server.close() 
