@@ -1,5 +1,4 @@
 import socket 
-import select 
 import sys
 from _thread import *
 
@@ -26,7 +25,7 @@ def client_thread(conn,addr):
     
     # hello message to the client with conn object 
 
-    conn.send("successfuly connected to ssl-chat server !!")
+    conn.send(b"successfuly connected to ssl-chat server !!")
 
     while True : 
         try:
@@ -35,7 +34,7 @@ def client_thread(conn,addr):
             if message : 
 
                 #NOTE i dont know yet if the log here will be needed later on
-                message_ = '<'+addr[0],+'>'+message
+                message_ = '<'+addr[0]+'>'+message
                 # print the logs in the servers terminal 
                 print(message_)
                 
@@ -53,7 +52,7 @@ def send(message,connection):
     for client in list_of_clients:
         if client != connection :
             try:
-                client.send(message)
+                client.send(b'message')
 
             except :
                 client.close()
@@ -75,7 +74,7 @@ while True :
     list_of_clients.append(conn)
 
     #TODO the connection log is printed to the server's terminal 
-    connection_log_msg = '<'+'log'+'>'+' user :'+addr+' just connected'
+    connection_log_msg = '<'+'log'+'>'+' user :'+str(addr)+' just connected'
     print('\n'+connection_log_msg)
 
     #creating a thread for every user 
