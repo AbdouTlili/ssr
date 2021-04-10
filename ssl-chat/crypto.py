@@ -1,12 +1,18 @@
 import subprocess 
 import os 
-import uuid 
+import string
+import secrets
 
 class MyCrypto:
 
     def __init__(self,user_id):
         self.user_id = user_id
         self.path = "./"+user_id
+        self._create_dir()
+        self._create_passwd_file()
+        self.create_private_key()
+        self.create_public_key()
+
 
     def _create_dir(self):
         # create a dir for the use to store its keys and files 
@@ -22,9 +28,12 @@ class MyCrypto:
             print("dir " + self.path + " created for user")
 
     def _create_passwd_file(self):
+
+        alphabet = string.ascii_letters + string.digits
+        password = ''.join(secrets.choice(alphabet) for i in range(128))
         try : 
             with open(self.path+"/srcpasswd","w") as f :
-                f.write(str(uuid.uuid1()))
+                f.write(password)
                 f.close()
         except : 
             print(f"error while creating the passwd file for {self.user_id}")
