@@ -17,21 +17,25 @@ Port = int(sys.argv[2])
 #bind the sever to the given ip and port 
 server.bind((IP_addr,Port))
 
+
+# we limited the clients number to just simulate a single peer-to-peer cnnection 
+# it can be generalized to many later 
 server.listen(2)
 
+#a list is used to enable the extention later
+#but here the list will contain two clients max 
 list_of_clients = []
 
 def client_thread(conn,addr):
     
     # hello message to the client with conn object 
-    #conn.send(b"successfuly connected to ssl-chat server !!")
+    conn.send(b"successfuly connected to ssl-chat server !!")
     while True : 
         try:
-            
             message = conn.recv(4096)
             
             print(message.decode())
-            print('***')
+
             if message : 
 
                 #NOTE i dont know yet if the log here will be needed later on
@@ -66,7 +70,7 @@ def remove(connection):
 print('server started.. \nwaiting for connections..')
 while True : 
 
-    #accept connection requests and return two oarams needed :
+    #accept connection requests and return two params needed :
     # 'conn' which is a socket object  
     # and 'addr' which is the address of the client 
     conn, addr = server.accept()

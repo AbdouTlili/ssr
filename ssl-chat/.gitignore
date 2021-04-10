@@ -3,4 +3,5 @@
 *.crypt
 test.py
 sbprc.py
-__.py
+_.py
+*_
