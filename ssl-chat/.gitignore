@@ -5,3 +5,5 @@ test.py
 sbprc.py
 _.py
 *_
+__pycache__
+*pyc
