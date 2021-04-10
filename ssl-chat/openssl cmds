@@ -20,7 +20,8 @@ openssl rsautl -decrypt -in secret.crypt -out secret.txt -inkey dest_rsa.pem
 
 Chiffrement d un message avec un secret (clé symétrique) en utilisant
 l algorithme DES-CBC:
- openssl enc -des-cbc -in message.txt -out message.crypt -pass file:secret.txt
+openssl enc -des-cbc -in message.txt -out message.crypt -pass file:secret.txt
+
 
 Déchiffrement du "message.crypt" à l'aide de secret qui se trouve dans
 "secret.txt" : 
@@ -39,6 +40,5 @@ source "src_rsa.pem" :
 openssl rsautl -in message.crypt.dgst -out message.crypt.dgst.sign -sign -inkey src_rsa.pem
 
  Déchiffrement de l'empreinte (code de hashage) du message vers dgst1 :
-openssl rsautl -in message.crypt.dgst.sign -out dgst1 -pubin
--inkey src_rsa_pub.pem
+openssl rsautl -in message.crypt.dgst.sign -out dgst1 -pubin -inkey src_rsa_pub.pem
 
