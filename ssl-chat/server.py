@@ -24,7 +24,7 @@ list_of_clients = []
 def client_thread(conn,addr):
     
     # hello message to the client with conn object 
-    conn.send(b"successfuly connected to ssl-chat server !!")
+    #conn.send(b"successfuly connected to ssl-chat server !!")
     while True : 
         try:
             
