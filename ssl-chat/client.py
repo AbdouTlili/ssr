@@ -2,7 +2,6 @@ import sys
 import socket 
 import select
 import os
-from handshake import handshake
 from crypto  import MyCrypto
 server = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
 if len(sys.argv) != 4 :
@@ -24,7 +23,9 @@ server.connect((IP_addr,Port))
 
 ## TODO  update the handshale function
 
-handshake(server,True, password) 
+
+crypto.handshake(server)
+
 
 #while True: 
 #  

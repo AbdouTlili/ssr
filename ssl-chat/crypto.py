@@ -1,7 +1,9 @@
 import subprocess 
 import os 
+import socket
 import string
 import secrets
+import time
 
 class MyCrypto:
 
@@ -12,6 +14,14 @@ class MyCrypto:
         self._create_passwd_file()
         self.create_private_key()
         self.create_public_key()
+
+    def _get_public_key(self):
+        public_key = open(f"{self.path}/src_rsa_pub.pem", 'r').read()
+        return public_key
+
+    def _save_peer_pkey(self,pkey):
+        open(f"{self.path}/dest_rsa_pub.pem", 'w').write(pkey)
+
 
 
     def _create_dir(self):
@@ -70,4 +80,32 @@ class MyCrypto:
             print(f"-> Public key created successfullyfor {self.user_id} ")
         else : 
             print(f"-> an error occured wihle generating the Public key of {self.user_id}")
+
+    def handshake(self,server):
+        server.settimeout(2.0) # configure a timeout value of 3 seconds
+        while True:
+            try:
+                response = server.recv(4096)   # get the packet received (if any)
+                
+                if response.decode() == "start handshake":
+                    pkey = self._get_public_key()
+                    server.send("handshake".encode())
+                    server.send(pkey.encode())
+                    print(f"public key of {self.user_id} sent to peer")
+
+                elif response.decode() == "handshake":
+                    response = server.recv(4096)
+                    self._save_peer_pkey(response.decode())
+                    print("peers public key received ")
+                    return 0 
+                
+            except socket.timeout:
+                print('No handshake request received ')
+
+                try:
+                    server.send("start handshake".encode())
+                except: 
+                    pass
+
+
 
